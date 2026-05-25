@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Search, Filter, DollarSign, TrendingUp, Users, Calendar } from 'lucide-react';
 import { Card, CardHeader, CardBody } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
@@ -256,9 +257,11 @@ export const DealsPage: React.FC = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <Button variant="outline" size="sm">
-                        View Details
-                      </Button>
+                      <Link to="/document-chamber">
+                        <Button variant="outline" size="sm">
+                          Document Chamber
+                        </Button>
+                      </Link>
                     </td>
                   </tr>
                 ))}

@@ -68,6 +68,26 @@ export interface Document {
   ownerId: string;
 }
 
+export type DealDocumentStatus = 'draft' | 'in_review' | 'signed';
+
+export interface DealContractDocument {
+  id: string;
+  name: string;
+  dealTitle: string;
+  dealId: string;
+  mimeType: string;
+  sizeBytes: number;
+  status: DealDocumentStatus;
+  ownerId: string;
+  counterpartyId: string;
+  previewUrl: string;
+  signatureDataUrl?: string;
+  signedAt?: string;
+  signedByName?: string;
+  lastModified: string;
+  uploadedAt: string;
+}
+
 export type MeetingRequestStatus = 'pending' | 'accepted' | 'declined';
 
 export interface AvailabilitySlot {
