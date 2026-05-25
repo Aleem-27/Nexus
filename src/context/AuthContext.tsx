@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { User, UserRole, AuthContextType } from '../types';
-import { users } from '../data/users';
+import { entrepreneurs, investors } from '../data/users';
 import toast from 'react-hot-toast';
 
 // Create Auth Context
@@ -9,6 +9,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // Local storage keys
 const USER_STORAGE_KEY = 'business_nexus_user';
 const RESET_TOKEN_KEY = 'business_nexus_reset_token';
+
+// Mutable users array for registration
+let users: User[] = [...entrepreneurs, ...investors];
 
 // Auth Provider Component
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

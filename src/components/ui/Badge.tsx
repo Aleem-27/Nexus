@@ -3,7 +3,7 @@ import React from 'react';
 export type BadgeVariant = 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'error' | 'gray';
 export type BadgeSize = 'sm' | 'md' | 'lg';
 
-interface BadgeProps {
+interface BadgeProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: BadgeVariant;
   size?: BadgeSize;
@@ -17,6 +17,7 @@ export const Badge: React.FC<BadgeProps> = ({
   size = 'md',
   rounded = false,
   className = '',
+  ...props
 }) => {
   const variantClasses = {
     primary: 'bg-primary-100 text-primary-800',
@@ -37,10 +38,11 @@ export const Badge: React.FC<BadgeProps> = ({
   const roundedClass = rounded ? 'rounded-full' : 'rounded';
   
   return (
-    <span
+    <button
       className={`inline-flex items-center font-medium ${roundedClass} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      {...props}
     >
       {children}
-    </span>
+    </button>
   );
 };
