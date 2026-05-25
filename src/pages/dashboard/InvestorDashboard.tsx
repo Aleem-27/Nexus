@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, PieChart, Filter, Search, PlusCircle } from 'lucide-react';
+import { Users, PieChart, Filter, Search, PlusCircle, Calendar } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card, CardBody, CardHeader } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
@@ -10,6 +10,8 @@ import { useAuth } from '../../context/AuthContext';
 import { Entrepreneur } from '../../types';
 import { entrepreneurs } from '../../data/users';
 import { getRequestsFromInvestor } from '../../data/collaborationRequests';
+import { getUpcomingMeetingsForUser } from '../../data/meetings';
+import { UpcomingMeetingsList } from '../../components/calendar/UpcomingMeetingsList';
 
 export const InvestorDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -38,6 +40,8 @@ export const InvestorDashboard: React.FC = () => {
     return matchesSearch && matchesIndustry;
   });
   
+  const upcomingMeetings = getUpcomingMeetingsForUser(user.id);
+
   // Get unique industries for filter
   const industries = Array.from(new Set(entrepreneurs.map(e => e.industry)));
   
@@ -101,7 +105,7 @@ export const InvestorDashboard: React.FC = () => {
       </div>
       
       {/* Stats summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="bg-primary-50 border border-primary-100">
           <CardBody>
             <div className="flex items-center">
@@ -145,40 +149,67 @@ export const InvestorDashboard: React.FC = () => {
             </div>
           </CardBody>
         </Card>
-      </div>
-      
-      {/* Entrepreneurs grid */}
-      <div>
-        <Card>
-          <CardHeader>
-            <h2 className="text-lg font-medium text-gray-900">Featured Startups</h2>
-          </CardHeader>
-          
+
+        <Card className="bg-success-50 border border-success-100">
           <CardBody>
-            {filteredEntrepreneurs.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredEntrepreneurs.map(entrepreneur => (
-                  <EntrepreneurCard
-                    key={entrepreneur.id}
-                    entrepreneur={entrepreneur}
-                  />
-                ))}
+            <div className="flex items-center">
+              <div className="p-3 bg-green-100 rounded-full mr-4">
+                <Calendar size={20} className="text-success-700" />
               </div>
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-gray-600">No startups match your filters</p>
-                <Button 
-                  variant="outline" 
-                  className="mt-2"
-                  onClick={() => {
-                    setSearchQuery('');
-                    setSelectedIndustries([]);
-                  }}
-                >
-                  Clear filters
-                </Button>
+              <div>
+                <p className="text-sm font-medium text-success-700">Upcoming Meetings</p>
+                <h3 className="text-xl font-semibold text-success-900">{upcomingMeetings.length}</h3>
               </div>
-            )}
+            </div>
+          </CardBody>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <h2 className="text-lg font-medium text-gray-900">Featured Startups</h2>
+            </CardHeader>
+
+            <CardBody>
+              {filteredEntrepreneurs.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {filteredEntrepreneurs.map(entrepreneur => (
+                    <EntrepreneurCard
+                      key={entrepreneur.id}
+                      entrepreneur={entrepreneur}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-gray-600">No startups match your filters</p>
+                  <Button
+                    variant="outline"
+                    className="mt-2"
+                    onClick={() => {
+                      setSearchQuery('');
+                      setSelectedIndustries([]);
+                    }}
+                  >
+                    Clear filters
+                  </Button>
+                </div>
+              )}
+            </CardBody>
+          </Card>
+        </div>
+
+        <Card>
+          <CardHeader className="flex justify-between items-center">
+            <h2 className="text-lg font-medium text-gray-900">Upcoming Meetings</h2>
+            <Link to="/calendar" className="text-sm font-medium text-primary-600 hover:text-primary-500">
+              Calendar
+            </Link>
+          </CardHeader>
+          <CardBody>
+            <UpcomingMeetingsList meetings={upcomingMeetings} userId={user.id} limit={5} />
           </CardBody>
         </Card>
       </div>

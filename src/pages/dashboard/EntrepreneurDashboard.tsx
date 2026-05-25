@@ -9,7 +9,9 @@ import { InvestorCard } from '../../components/investor/InvestorCard';
 import { useAuth } from '../../context/AuthContext';
 import { CollaborationRequest } from '../../types';
 import { getRequestsForEntrepreneur } from '../../data/collaborationRequests';
+import { getUpcomingMeetingsForUser } from '../../data/meetings';
 import { investors } from '../../data/users';
+import { UpcomingMeetingsList } from '../../components/calendar/UpcomingMeetingsList';
 
 export const EntrepreneurDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -35,6 +37,7 @@ export const EntrepreneurDashboard: React.FC = () => {
   if (!user) return null;
   
   const pendingRequests = collaborationRequests.filter(req => req.status === 'pending');
+  const upcomingMeetings = user ? getUpcomingMeetingsForUser(user.id) : [];
   
   return (
     <div className="space-y-6 animate-fade-in">
@@ -93,7 +96,7 @@ export const EntrepreneurDashboard: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm font-medium text-accent-700">Upcoming Meetings</p>
-                <h3 className="text-xl font-semibold text-accent-900">2</h3>
+                <h3 className="text-xl font-semibold text-accent-900">{upcomingMeetings.length}</h3>
               </div>
             </div>
           </CardBody>
@@ -147,8 +150,20 @@ export const EntrepreneurDashboard: React.FC = () => {
           </Card>
         </div>
         
-        {/* Recommended investors */}
+        {/* Upcoming meetings & recommended investors */}
         <div className="space-y-4">
+          <Card>
+            <CardHeader className="flex justify-between items-center">
+              <h2 className="text-lg font-medium text-gray-900">Upcoming Meetings</h2>
+              <Link to="/calendar" className="text-sm font-medium text-primary-600 hover:text-primary-500">
+                Calendar
+              </Link>
+            </CardHeader>
+            <CardBody>
+              <UpcomingMeetingsList meetings={upcomingMeetings} userId={user.id} limit={4} />
+            </CardBody>
+          </Card>
+
           <Card>
             <CardHeader className="flex justify-between items-center">
               <h2 className="text-lg font-medium text-gray-900">Recommended Investors</h2>

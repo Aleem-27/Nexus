@@ -30,7 +30,11 @@ import { DealsPage } from './pages/deals/DealsPage';
 // Chat Pages
 import { ChatPage } from './pages/chat/ChatPage';
 
+<<<<<<< HEAD
 // Calendar Pages
+=======
+// Calendar
+>>>>>>> c1c0d7a (feat: add calender component and ui)
 import { CalendarPage } from './pages/calendar/CalendarPage';
 
 function App() {
@@ -91,6 +95,10 @@ function App() {
           <Route path="/chat" element={<DashboardLayout />}>
             <Route index element={<ChatPage />} />
             <Route path=":userId" element={<ChatPage />} />
+          </Route>
+
+          <Route path="/calendar" element={<DashboardLayout />}>
+            <Route index element={<CalendarPage />} />
           </Route>
           
           {/* Calendar Routes */}
